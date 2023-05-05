@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hari Libur Card</title>
+    <style>
+        body{
+            background-color: #1A1A1A;
+        }
+        .card{
+            margin: 0 auto;
+            max-width: 500px;
+            border-radius: 5px;
+            padding: 20px;
+        } 
+        .card-holiday{
+            background-image: linear-gradient(to bottom right, red, yellow);
+            color: white;
+            display: none;
+        }
+        .card-masuk{
+            background-color: #ffffff;
+        }
+        .gambar{
+            float: right;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div align="center">
+        <input type="date" id="tgl" onchange="getinfolibur()">
+    </div>
+    <br>
+    <div id="card-holiday" class="card card-holiday">
+        <img src="hapi.jpg" class="gambar">
+        <h3>Hapi Hapi Hapi</h3>
+        <span id="hari-libur">Hari Libur</span><br>
+        <span id="tgl-libur"></span>
+    </div>
+    <div id="card-masuk" class="card card-masuk">
+        <img src="fine.png" class="gambar">
+        <h3>This is fine.</h3>
+        <span>Hari Kerja</span><br>
+        <span>Semangat boss🔥</span>
+    </div>
+    <br>
+    <div align="center" style="color:white">
+        <small>✨Code by Feriansyah. Full tutorial at Fishertekno.com✨</small>
+    </div>
+
+    <script>
+        async function getinfolibur(){
+            //get info libur dari api
+            var get_data = await fetch('https://api-harilibur.vercel.app/api')
+            var libur_arr = await get_data.json()
+            //validasi
+            var tgl = document.getElementById('tgl').value
+            for (let index = 0; index < libur_arr.length; index++) {
+                if(libur_arr[index]['is_national_holiday'] && tgl == libur_arr[index]['holiday_date']){
+                    //ya?
+                    document.getElementById('card-holiday').style.display = "block"; //tampil card holiday
+                    document.getElementById('card-masuk').style.display = "none"; //tampil card holiday
+                    document.getElementById('hari-libur').innerHTML = libur_arr[index]['holiday_name']; //set konten
+                    document.getElementById('tgl-libur').innerHTML = libur_arr[index]['holiday_date']; //set konten
+                    break
+                }else{
+                    document.getElementById('card-holiday').style.display = "none"; //tampil card biasa
+                    document.getElementById('card-masuk').style.display = "block"; //tampil card biasa
+                }
+            }
+        }
+    </script>
+</body>
+</html>
